@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIRON — Builder. Not an NPC.</title>
+  <meta name="description" content="MIRON — Full-stack разработчик / Автоматизация / AI-продукты. Минималистичное портфолио.">
+  
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Space+Grotesk:wght@600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Grain & Ambient Glow -->
+  <div class="ambient-glow"></div>
+  <div class="film-grain"></div>
+
+  <!-- Main Horizontal Viewport -->
+  <div class="horizontal-viewport" id="horizontalViewport">
+    <div class="horizontal-track" id="horizontalTrack">
+
+      <!-- SECTION 01: HERO (TITLE FRAME) -->
+      <section class="section section-hero" id="hero">
+        <div class="hero-content">
+          <h1 class="hero-title">MIRON</h1>
+          <p class="hero-tagline">Builder. Not an NPC.</p>
+          <p class="hero-subtitle">Full-stack разработчик / Автоматизация / AI-продукты</p>
+        </div>
+
+        <div class="hero-scroll-hint" id="heroScrollHint">
+          <span class="scroll-label">scroll</span>
+          <span class="scroll-arrow">→</span>
+        </div>
+      </section>
+
+      <!-- SECTION 02: SELECTED WORKS -->
+      <section class="section section-works" id="works">
+        <div class="section-container">
+          <header class="section-header">
+            <span class="section-num">02</span>
+            <h2 class="section-title">Selected Works</h2>
+          </header>
+
+          <div class="projects-grid">
+            
+            <!-- Project Card 1 -->
+            <article class="project-card">
+              <div class="project-image-wrapper">
+                <img src="assets/ai_orchestrator.jpg" alt="AI Agent Orchestrator" class="project-img" loading="lazy">
+                <div class="project-overlay"></div>
+              </div>
+              <div class="project-info">
+                <span class="project-category">AI / Systems</span>
+                <h3 class="project-name">Agent Orchestrator</h3>
+                <p class="project-desc">Автономный конвейер мультиагентного выполнения задач с самокоррекцией и динамическим ветвлением.</p>
+                <div class="project-tags">
+                  <span>Python</span>
+                  <span>LangChain</span>
+                  <span>FastAPI</span>
+                  <span>Vector DB</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project Card 2 -->
+            <article class="project-card">
+              <div class="project-image-wrapper">
+                <img src="assets/nexus_automation.jpg" alt="Nexus Automation Engine" class="project-img" loading="lazy">
+                <div class="project-overlay"></div>
+              </div>
+              <div class="project-info">
+                <span class="project-category">Automation / Microservices</span>
+                <h3 class="project-name">Nexus Engine</h3>
+                <p class="project-desc">Высокоскоростная платформа автоматизации сложных бизнес-процессов и фонового парсинга данных.</p>
+                <div class="project-tags">
+                  <span>TypeScript</span>
+                  <span>Node.js</span>
+                  <span>Docker</span>
+                  <span>Redis</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project Card 3 -->
+            <article class="project-card text-card">
+              <div class="project-info">
+                <span class="project-category">Full-stack / Infrastructure</span>
+                <h3 class="project-name">Aether Terminal</h3>
+                <p class="project-desc">Минималистичный дашборд реального времени для мониторинга серверов и AI-инференса.</p>
+                <div class="project-tags">
+                  <span>React</span>
+                  <span>WebSocket</span>
+                  <span>Tailwind</span>
+                  <span>Go</span>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 03: TECH & PHILOSOPHY -->
+      <section class="section section-stack" id="stack">
+        <div class="section-container">
+          <header class="section-header">
+            <span class="section-num">03</span>
+            <h2 class="section-title">Philosophy & Stack</h2>
+          </header>
+
+          <div class="stack-layout">
+            <div class="philosophy-box">
+              <span class="quote-mark">“</span>
+              <p class="philosophy-text">Создавать инженерные решения, выходящие за рамки стандартных шаблонов. Чистая архитектура, высокая производительность и автоматизация routine-задач.</p>
+            </div>
+
+            <div class="stack-columns">
+              <div class="stack-col">
+                <h4 class="stack-col-title">Full-stack & Core</h4>
+                <ul class="stack-list">
+                  <li>TypeScript / JavaScript (ESNext)</li>
+                  <li>Node.js / Express / Next.js</li>
+                  <li>React / Modern Web Standard</li>
+                  <li>PostgreSQL / Redis / Prisma</li>
+                </ul>
+              </div>
+
+              <div class="stack-col">
+                <h4 class="stack-col-title">AI & Automation</h4>
+                <ul class="stack-list">
+                  <li>LLM Integrations & RAG Architecture</li>
+                  <li>Python / PyTorch / OpenAI API</li>
+                  <li>Puppeteer / Playwright / Scraping</li>
+                  <li>CI/CD / Docker / Linux Infrastructure</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 04: CONTACT -->
+      <section class="section section-contact" id="contact">
+        <div class="section-container">
+          <header class="section-header">
+            <span class="section-num">04</span>
+            <h2 class="section-title">Connect</h2>
+          </header>
+
+          <div class="contact-box">
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              <span class="status-text">SYSTEM STATUS: ONLINE / AVAILABLE FOR SELECT PROJECTS</span>
+            </div>
+
+            <h3 class="contact-heading">Готов к созданию мощных продуктов.</h3>
+
+            <div class="contact-actions">
+              <button class="email-copy-btn" id="copyEmailBtn" data-email="miron@builder.dev">
+                <span class="btn-text">miron@builder.dev</span>
+                <span class="copy-icon" aria-hidden="true">📋</span>
+              </button>
+
+              <div class="social-links">
+                <a href="https://github.com" target="_blank" rel="noopener" class="social-link">GitHub ↗</a>
+                <a href="https://t.me" target="_blank" rel="noopener" class="social-link">Telegram ↗</a>
+              </div>
+            </div>
+
+            <footer class="minimal-footer">
+              <span>© 2026 MIRON. ALL RIGHTS RESERVED.</span>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- UI Overlay: Progress Line and Navigation Indicators -->
+  <div class="ui-overlay">
+    <div class="nav-indicators">
+      <button class="nav-dot active" data-index="0" aria-label="Hero"></button>
+      <button class="nav-dot" data-index="1" aria-label="Works"></button>
+      <button class="nav-dot" data-index="2" aria-label="Philosophy"></button>
+      <button class="nav-dot" data-index="3" aria-label="Contact"></button>
+    </div>
+
+    <div class="page-counter">
+      <span id="currentNum">01</span> / 04
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">Скопировано в буфер обмена</div>
+
+  <script src="main.js"></script>
+</body>
+</html>
