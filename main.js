@@ -1,146 +1,109 @@
 /**
- * MIRON PORTFOLIO - HORIZONTAL SCROLL & INTERACTION ENGINE
+ * MIRON PORTFOLIO - LIGHT THEME INTERACTIVITY ENGINE
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const track = document.getElementById('horizontalTrack');
-  const navDots = document.querySelectorAll('.nav-dot');
-  const currentNumEl = document.getElementById('currentNum');
-  const progressFillEl = document.getElementById('progressFill');
-  const heroScrollHint = document.getElementById('heroScrollHint');
-  const copyEmailBtn = document.getElementById('copyEmailBtn');
+  const cursor = document.getElementById('customCursor');
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  const emailBtn = document.getElementById('emailBtn');
   const toast = document.getElementById('toast');
+  const accordionRows = document.querySelectorAll('[data-accordion]');
 
-  const totalSections = 4;
-  let currentIndex = 0;
-  let isScrolling = false;
+  /* --------------------------------------------------------------------------
+   * 1. Custom Green Pointer Cursor (#10B981)
+   * -------------------------------------------------------------------------- */
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let cursorX = mouseX;
+  let cursorY = mouseY;
 
-  /**
-   * Navigate to a specific section index (0 to 3)
-   */
-  function goToSection(index) {
-    if (index < 0) index = 0;
-    if (index >= totalSections) index = totalSections - 1;
-
-    currentIndex = index;
-
-    // Translate horizontal track
-    const offsetPercentage = -currentIndex * 100;
-    track.style.transform = `translateX(${offsetPercentage}vw)`;
-
-    // Update Nav Dots
-    navDots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === currentIndex);
-    });
-
-    // Update Counter (e.g. 01, 02)
-    const formattedNum = String(currentIndex + 1).padStart(2, '0');
-    currentNumEl.textContent = formattedNum;
-
-    // Update Progress Bar Width
-    const progressPercent = ((currentIndex + 1) / totalSections) * 100;
-    progressFillEl.style.width = `${progressPercent}%`;
-  }
-
-  /**
-   * Handle Mouse Wheel Horizontal Conversion
-   */
-  function handleWheel(e) {
-    // Prevent default page scroll
-    e.preventDefault();
-
-    if (isScrolling) return;
-
-    // Determine direction based on deltaY or deltaX
-    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-
-    if (delta > 30) {
-      // Scroll Right
-      if (currentIndex < totalSections - 1) {
-        isScrolling = true;
-        goToSection(currentIndex + 1);
-        setTimeout(() => { isScrolling = false; }, 800);
-      }
-    } else if (delta < -30) {
-      // Scroll Left
-      if (currentIndex > 0) {
-        isScrolling = true;
-        goToSection(currentIndex - 1);
-        setTimeout(() => { isScrolling = false; }, 800);
-      }
-    }
-  }
-
-  // Attach wheel listener to horizontal viewport
-  const viewport = document.getElementById('horizontalViewport');
-  viewport.addEventListener('wheel', handleWheel, { passive: false });
-
-  /**
-   * Handle Keyboard Navigation
-   */
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-      goToSection(currentIndex + 1);
-    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-      goToSection(currentIndex - 1);
-    } else if (e.key === 'Home') {
-      goToSection(0);
-    } else if (e.key === 'End') {
-      goToSection(totalSections - 1);
-    }
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
   });
 
-  /**
-   * Handle Navigation Dots Click
-   */
-  navDots.forEach(dot => {
-    dot.addEventListener('click', (e) => {
-      const idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
-      goToSection(idx);
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.2;
+    cursorY += (mouseY - cursorY) * 0.2;
+
+    if (cursor) {
+      cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+    }
+
+    requestAnimationFrame(animateCursor);
+  }
+  requestAnimationFrame(animateCursor);
+
+  // Add hover state to interactive elements
+  const hoverables = document.querySelectorAll('a, button, .project-row, .hero-scroll-indicator');
+  hoverables.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor?.classList.add('hovered'));
+    el.addEventListener('mouseleave', () => cursor?.classList.remove('hovered'));
+  });
+
+  /* --------------------------------------------------------------------------
+   * 2. Intersection Observer (Fade + Slide Up Reveal Animations)
+   * -------------------------------------------------------------------------- */
+  const revealElements = document.querySelectorAll('.reveal');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -80px 0px',
+    threshold: 0.1
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        // Optionally unobserve after revealing
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  /* --------------------------------------------------------------------------
+   * 3. Project Rows Accordion Toggle (Hover / Click)
+   * -------------------------------------------------------------------------- */
+  accordionRows.forEach(row => {
+    // Click toggle
+    row.addEventListener('click', (e) => {
+      // Don't trigger toggle if user clicked direct external link inside row
+      if (e.target.tagName.toLowerCase() === 'a') return;
+
+      const isActive = row.classList.contains('active');
+
+      // Optional: close other rows
+      accordionRows.forEach(r => r.classList.remove('active'));
+
+      if (!isActive) {
+        row.classList.add('active');
+      }
     });
   });
 
-  /**
-   * Hero Scroll Hint Click
-   */
-  if (heroScrollHint) {
-    heroScrollHint.addEventListener('click', () => {
-      goToSection(1);
+  /* --------------------------------------------------------------------------
+   * 4. Scroll Down Indicator Click
+   * -------------------------------------------------------------------------- */
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+      const projectsSection = document.getElementById('projects');
+      if (projectsSection) {
+        projectsSection.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   }
 
-  /**
-   * Touch / Swipe Gesture Engine
-   */
-  let touchStartX = 0;
-  let touchEndX = 0;
+  /* --------------------------------------------------------------------------
+   * 5. Email Copy & Toast Notification
+   * -------------------------------------------------------------------------- */
+  if (emailBtn) {
+    emailBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = emailBtn.getAttribute('data-email') || 'miron@builder.dev';
 
-  viewport.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  viewport.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, { passive: true });
-
-  function handleSwipe() {
-    const swipeDistance = touchStartX - touchEndX;
-    if (swipeDistance > 50) {
-      // Swiped Left -> Move to Next Section
-      goToSection(currentIndex + 1);
-    } else if (swipeDistance < -50) {
-      // Swiped Right -> Move to Previous Section
-      goToSection(currentIndex - 1);
-    }
-  }
-
-  /**
-   * Email Copy to Clipboard
-   */
-  if (copyEmailBtn) {
-    copyEmailBtn.addEventListener('click', () => {
-      const email = copyEmailBtn.getAttribute('data-email') || 'miron@builder.dev';
       navigator.clipboard.writeText(email).then(() => {
         showToast('Email скопирован в буфер обмена');
       }).catch(() => {
@@ -150,13 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showToast(message) {
+    if (!toast) return;
     toast.textContent = message;
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
     }, 2500);
   }
-
-  // Initialize section 0
-  goToSection(0);
 });
