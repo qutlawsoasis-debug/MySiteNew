@@ -1,171 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MIRON — Builder. Not an NPC.</title>
-  <meta name="description" content="MIRON — Full-stack разработчик из Германии. Автоматизация, AI-интеграции, игровые серверы.">
-  
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>miron.dev — Network Topology & Systems Architect</title>
+    <meta name="description" content="Portfolio of Miron — Rust server admin, Oxide plugin developer & AI tools builder." />
 
-  <!-- Custom Pointer Cursor -->
-  <div class="custom-cursor" id="customCursor"></div>
+    <!-- Fontshare: Clash Display + General Sans -->
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet" />
 
-  <!-- Header Navigation Bar -->
-  <header class="top-nav">
-    <div class="nav-left">MIRON / 2026</div>
-    <div class="nav-right">Builder. Not an NPC.</div>
-  </header>
-
-  <!-- Main Scrollable Container -->
-  <main class="main-content">
-
-    <!-- SECTION 1: HERO -->
-    <section class="section section-hero" id="hero">
-      <div class="hero-center">
-        <h1 class="hero-giant-title reveal">BUILDER</h1>
-      </div>
-
-      <div class="hero-bottom reveal">
-        <p class="hero-subtitle">Full-stack разработчик / Автоматизация / AI-продукты</p>
-        <div class="hero-scroll-indicator" id="scrollIndicator">
-          <div class="scroll-line"></div>
-          <span class="scroll-text">scroll <span class="arrow-down">↓</span></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: PROJECTS (SELECTED WORKS) -->
-    <section class="section section-projects" id="projects">
-      <div class="projects-layout">
-        
-        <!-- Vertical Side Label -->
-        <aside class="side-label-container reveal">
-          <span class="side-label">SELECTED WORKS</span>
-        </aside>
-
-        <!-- Project Rows List -->
-        <div class="projects-list">
-
-          <!-- Project Row 01: VexonRust -->
-          <article class="project-row reveal" data-accordion>
-            <div class="row-header">
-              <span class="row-number">01</span>
-              <h2 class="row-title">VexonRust</h2>
-              <span class="row-category">Game Server / Full-stack</span>
-              <span class="row-year">2024</span>
-              <span class="row-toggle">+</span>
-            </div>
-            <div class="row-body">
-              <div class="row-content">
-                <p class="row-desc">Игровой Rust-сервер с нуля. Steam OAuth, личный кабинет, магазин привилегий, live-статистика онлайна и таймер вайпа.</p>
-                <div class="row-footer">
-                  <div class="row-tags">
-                    <span>Node.js</span>
-                    <span>React</span>
-                    <span>Steam API</span>
-                    <span>WebSocket</span>
-                  </div>
-                  <a href="https://vexonrust.com" target="_blank" rel="noopener" class="row-link">vexonrust.com ↗</a>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project Row 02: AppyBot -->
-          <article class="project-row reveal" data-accordion>
-            <div class="row-header">
-              <span class="row-number">02</span>
-              <h2 class="row-title">AppyBot — Эппи</h2>
-              <span class="row-category">AI / Telegram Bot</span>
-              <span class="row-year">2025</span>
-              <span class="row-toggle">+</span>
-            </div>
-            <div class="row-body">
-              <div class="row-content">
-                <p class="row-desc">Telegram-бот для контроля питания. Считает калории, составляет меню из продуктов немецких супермаркетов. Сфоткай еду — ИИ сам посчитает калории.</p>
-                <div class="row-footer">
-                  <div class="row-tags">
-                    <span>Python</span>
-                    <span>OpenAI Vision</span>
-                    <span>Telegram API</span>
-                    <span>PostgreSQL</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- Project Row 03: Rust Tools -->
-          <article class="project-row reveal" data-accordion>
-            <div class="row-header">
-              <span class="row-number">03</span>
-              <h2 class="row-title">Rust Tools</h2>
-              <span class="row-category">Automation / DevTools</span>
-              <span class="row-year">2025</span>
-              <span class="row-toggle">+</span>
-            </div>
-            <div class="row-body">
-              <div class="row-content">
-                <p class="row-desc">Инструмент для администраторов Rust-серверов. Автовайпы, коммиты в Discord, голосование за карту, автогенерация карт через RustMaps API. Настроил — забыл.</p>
-                <div class="row-footer">
-                  <div class="row-tags">
-                    <span>Node.js</span>
-                    <span>Discord API</span>
-                    <span>RustMaps API</span>
-                    <span>Cron</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 3: ABOUT -->
-    <section class="section section-about" id="about">
-      <div class="about-container">
-        <div class="about-left reveal">
-          <span class="huge-num">03</span>
-        </div>
-        <div class="about-right">
-          <div class="about-block-1 reveal">
-            <h2 class="about-headline">Строю вещи которые работают.<br>Не шаблоны — продукты.</h2>
-          </div>
-          <div class="about-block-2 reveal">
-            <p class="about-text">Full-stack разработчик из Германии. Специализация: автоматизация, AI-интеграции, игровые серверы и всё что между ними.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: CONTACT -->
-    <section class="section section-contact" id="contact">
-      <div class="contact-container reveal">
-        <h2 class="contact-title">Есть идея?</h2>
-        <a href="mailto:miron@builder.dev" class="contact-email" id="emailBtn" data-email="miron@builder.dev">miron@builder.dev</a>
-        <div class="contact-socials">
-          <a href="https://github.com" target="_blank" rel="noopener" class="social-link">GitHub</a>
-          <span class="social-sep">/</span>
-          <a href="https://t.me" target="_blank" rel="noopener" class="social-link">Telegram</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Notification Toast -->
-  <div class="toast" id="toast">Скопировано в буфер обмена</div>
-
-  <script src="main.js"></script>
-</body>
+    <!-- Google Fonts: JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="notranslate bg-[#0A0A0F] text-[#F5F4FA] antialiased overflow-hidden selection:bg-[#6D58F0] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
