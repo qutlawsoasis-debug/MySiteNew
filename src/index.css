@@ -59,7 +59,7 @@
     --color-text-primary: #0F172A;
     --color-text-muted: #475569;
     --color-accent-violet: #6D58F0;
-    --color-accent-green: #059669;
+    --color-accent-green: #047857;
   }
 
   html, body, #root {
@@ -146,6 +146,38 @@
   50% { opacity: 0; }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-cursor-blink {
   animation: blink 1s step-start infinite;
+}
+
+@media (max-width: 768px) {
+  html, body, #root {
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  main {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+
+  main > section {
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+  }
 }

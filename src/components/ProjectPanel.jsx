@@ -6,10 +6,11 @@ export default function ProjectPanel({ project, t }) {
 
   const isCodeProject = project.id === 'rust_plugins';
   const localized = t.projects.items[project.id] || project;
+  const detailsId = `project-details-${project.id}`;
 
   return (
-    <section className="w-screen h-screen flex-shrink-0 flex items-center justify-center p-6 md:p-16 relative z-10">
-      <div className="glass-capsule max-w-4xl w-full mx-auto p-8 md:p-12 rounded-[2.5rem] min-h-[75vh] flex flex-col justify-between">
+    <section className="w-screen h-screen flex-shrink-0 flex items-start justify-center px-6 pb-6 pt-32 md:px-16 md:pb-10 md:pt-32 relative z-10">
+      <div className="glass-capsule max-w-4xl w-full h-full min-h-0 mx-auto p-8 md:p-12 rounded-[2.5rem] overflow-y-auto flex flex-col justify-between">
         
         {/* Top Header & Metadata */}
         <div>
@@ -40,7 +41,7 @@ export default function ProjectPanel({ project, t }) {
             <div className="border border-current/15 bg-black/90 p-4 font-mono text-xs text-[#F5F4FA] space-y-2 overflow-x-auto rounded-2xl shadow-2xl">
               <div className="text-[#8A8A9E] text-[11px] pb-2 border-b border-white/10 flex justify-between">
                 <span>// Oxide Plugin: AdminTools.cs</span>
-                <span className="text-[#39FF88]">C# .NET / Oxide API</span>
+                <span className="text-[var(--color-accent-green)]">C# .NET / Oxide API</span>
               </div>
               <pre className="text-emerald-400">
 {`using Oxide.Core;
@@ -67,6 +68,10 @@ namespace Oxide.Plugins {
               <img
                 src={project.image}
                 alt={localized.title}
+                width={1376}
+                height={768}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transform group-hover:scale-102 transition-transform duration-500"
               />
             </div>
@@ -74,8 +79,8 @@ namespace Oxide.Plugins {
 
           {/* Expandable Specifications Drawer */}
           {detailsOpen && (
-            <div className="mt-4 p-4 bg-black/80 text-[#F5F4FA] border border-current/15 text-xs space-y-3 rounded-2xl animate-fadeIn">
-              <div className="text-[#39FF88] font-mono font-semibold text-xs uppercase">
+            <div id={detailsId} className="project-details-scroll mt-4 p-4 bg-black/80 text-[#F5F4FA] border border-current/15 text-xs space-y-3 rounded-2xl animate-fadeIn">
+              <div className="text-[var(--color-accent-green)] font-mono font-semibold text-xs uppercase">
                 {t.projects.inspect}
               </div>
               <div className="text-[#F5F4FA] leading-relaxed">
@@ -96,6 +101,8 @@ namespace Oxide.Plugins {
         <div className="pt-4 border-t border-current/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
           <button
             onClick={() => setDetailsOpen(!detailsOpen)}
+            aria-expanded={detailsOpen}
+            aria-controls={detailsId}
             className="flex items-center gap-2 opacity-70 hover:opacity-100 hover:text-[#6D58F0] transition-colors cursor-pointer font-medium"
           >
             <span>{detailsOpen ? t.projects.hide : t.projects.inspect}</span>

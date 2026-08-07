@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-function RectangularMeshPlane({ theme = 'dark' }) {
+function RectangularMeshPlane({ theme = 'dark', reducedMotion = false }) {
   const lineRef = useRef();
 
   const cols = 44;
@@ -101,21 +101,19 @@ function RectangularMeshPlane({ theme = 'dark' }) {
   }, [raycaster, camera, mousePlane]);
 
   useFrame((state) => {
-    if (!lineRef.current) return;
+    if (reducedMotion || !lineRef.current) return;
 
     const time = state.clock.getElapsedTime();
     const positionAttr = lineRef.current.geometry.attributes.position;
     const array = positionAttr.array;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     for (let i = 0; i < numVertices; i++) {
       const bx = basePositions[i * 3];
       const by = basePositions[i * 3 + 1];
 
-      let zTarget = prefersReducedMotion ? 0 : Math.sin(bx * 0.35 + time * 0.6) * Math.cos(by * 0.35 + time * 0.6) * 0.12;
+      let zTarget = Math.sin(bx * 0.35 + time * 0.6) * Math.cos(by * 0.35 + time * 0.6) * 0.12;
 
-      if (mouseActive.current && !prefersReducedMotion) {
+      if (mouseActive.current) {
         const dx = bx - mousePoint.current.x;
         const dy = by - mousePoint.current.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -154,14 +152,18 @@ function RectangularMeshPlane({ theme = 'dark' }) {
 }
 
 export default function DeformableMeshBackground({ theme = 'dark' }) {
+  const reducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       <Canvas
+        frameloop={reducedMotion ? 'demand' : 'always'}
         camera={{ position: [0, 0, 10], fov: 50 }}
         gl={{ alpha: true, antialias: true }}
         className="w-full h-full block"
       >
-        <RectangularMeshPlane theme={theme} />
+        <RectangularMeshPlane theme={theme} reducedMotion={reducedMotion} />
       </Canvas>
     </div>
   );

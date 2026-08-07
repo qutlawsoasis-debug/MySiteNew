@@ -4,6 +4,12 @@ export default function ContactSection({ t }) {
   const [copied, setCopied] = useState(false);
 
   const email = 'qutlawsoasis@gmail.com';
+  const berlinTime = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Berlin',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZoneName: 'shortOffset',
+  }).format(new Date());
 
   const copyEmail = (e) => {
     e.preventDefault();
@@ -62,11 +68,11 @@ export default function ContactSection({ t }) {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 font-mono text-xs">
           <div className="p-3.5 rounded-2xl bg-current/5 border border-current/10">
             <span className="opacity-50 block text-[11px] mb-1">AVAILABILITY</span>
-            <span className="text-[#39FF88] font-semibold">Open for Contracts</span>
+            <span className="text-[var(--color-accent-green)] font-semibold">Open for Contracts</span>
           </div>
           <div className="p-3.5 rounded-2xl bg-current/5 border border-current/10">
             <span className="opacity-50 block text-[11px] mb-1">TIMEZONE</span>
-            <span className="text-current font-semibold">CET / UTC+1 (Germany)</span>
+            <span className="text-current font-semibold">Europe/Berlin · {berlinTime}</span>
           </div>
           <div className="p-3.5 rounded-2xl bg-current/5 border border-current/10">
             <span className="opacity-50 block text-[11px] mb-1">RESPONSE SLA</span>
