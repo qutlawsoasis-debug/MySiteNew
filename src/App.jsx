@@ -67,13 +67,19 @@ const projects = [
   },
 ];
 
+const HERO_STEPS = 7;
+
 export default function App() {
   const containerRef = useRef(null);
+  const sectionRefs = useRef([]);
   const targetScrollLeftRef = useRef(0);
   const isScrollingRef = useRef(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentSection, setCurrentSection] = useState(0);
   const [theme, setTheme] = useState('dark');
+  const [heroStep, setHeroStep] = useState(0);
+  const [projectsOpen, setProjectsOpen] = useState(false);
+  const heroStepRef = useRef(0);
 
   // Detect initial language from URL ?lang=ru or browser locale
   const getInitialLang = () => {
@@ -97,6 +103,10 @@ export default function App() {
   };
 
   useEffect(() => {
+    heroStepRef.current = heroStep;
+  }, [heroStep]);
+
+  useEffect(() => {
     document.documentElement.lang = lang;
     document.documentElement.setAttribute('data-theme', theme);
   }, [lang, theme]);
@@ -105,12 +115,16 @@ export default function App() {
   const totalSections = 7;
 
   const scrollToSection = (secIndex) => {
+    setProjectsOpen(secIndex >= 3 && secIndex <= 6);
     const container = containerRef.current;
     if (!container) return;
-    const maxScroll = container.scrollWidth - container.clientWidth;
-    const target = (secIndex / (totalSections - 1)) * maxScroll;
+    const section = sectionRefs.current[secIndex];
+    const target = section
+      ? container.scrollLeft + section.getBoundingClientRect().left - container.getBoundingClientRect().left
+      : 0;
     targetScrollLeftRef.current = target;
     setCurrentSection(secIndex);
+    if (secIndex === 0) setHeroStep(0);
   };
 
   useEffect(() => {
@@ -118,6 +132,17 @@ export default function App() {
     if (!container) return;
 
     let animationFrameId;
+
+    sectionRefs.current = Array.from(container.children);
+    const syncTargetToCurrentSection = () => {
+      const section = sectionRefs.current[currentSection];
+      if (!section) return;
+      targetScrollLeftRef.current = container.scrollLeft
+        + section.getBoundingClientRect().left
+        - container.getBoundingClientRect().left;
+    };
+    const resizeObserver = new ResizeObserver(syncTargetToCurrentSection);
+    resizeObserver.observe(container);
 
     const smoothScroll = () => {
       const currentScrollLeft = container.scrollLeft;
@@ -138,7 +163,7 @@ export default function App() {
 
     animationFrameId = requestAnimationFrame(smoothScroll);
 
-    // Discrete section wheel scroll
+    // Discrete section wheel scroll with hero step interception
     const handleWheel = (e) => {
       e.preventDefault();
       if (isScrollingRef.current) return;
@@ -146,11 +171,31 @@ export default function App() {
       const scrollDelta = e.deltaY !== 0 ? e.deltaY : e.deltaX;
       if (Math.abs(scrollDelta) < 15) return;
 
-      if (scrollDelta > 0 && currentSection < totalSections - 1) {
+      const forward = scrollDelta > 0;
+      const hs = heroStepRef.current;
+
+      if (currentSection === 0 && forward && hs < HERO_STEPS - 1) {
+        setHeroStep(hs + 1);
+        isScrollingRef.current = true;
+        setTimeout(() => { isScrollingRef.current = false; }, 450);
+      } else if (currentSection === 0 && !forward && hs > 0) {
+        setHeroStep(hs - 1);
+        isScrollingRef.current = true;
+        setTimeout(() => { isScrollingRef.current = false; }, 450);
+      } else if (currentSection === 0 && forward && hs >= HERO_STEPS - 1) {
+        scrollToSection(1);
+        isScrollingRef.current = true;
+        setTimeout(() => { isScrollingRef.current = false; }, 450);
+      } else if (currentSection === 1 && !forward) {
+        scrollToSection(0);
+        setHeroStep(HERO_STEPS - 1);
+        isScrollingRef.current = true;
+        setTimeout(() => { isScrollingRef.current = false; }, 450);
+      } else if (forward && currentSection < totalSections - 1) {
         scrollToSection(currentSection + 1);
         isScrollingRef.current = true;
         setTimeout(() => { isScrollingRef.current = false; }, 450);
-      } else if (scrollDelta < 0 && currentSection > 0) {
+      } else if (!forward && currentSection > 0) {
         scrollToSection(currentSection - 1);
         isScrollingRef.current = true;
         setTimeout(() => { isScrollingRef.current = false; }, 450);
@@ -159,12 +204,29 @@ export default function App() {
 
     // Keyboard navigation
     const handleKeyDown = (e) => {
+      const activeElement = document.activeElement;
+      if (activeElement?.matches('button, a, input, textarea, select, [contenteditable]')
+        || activeElement?.closest?.('[contenteditable]')) return;
+      const hs = heroStepRef.current;
       if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
-        if (currentSection < totalSections - 1) scrollToSection(currentSection + 1);
+        if (currentSection === 0 && hs < HERO_STEPS - 1) {
+          setHeroStep(hs + 1);
+        } else if (currentSection === 0 && hs >= HERO_STEPS - 1) {
+          scrollToSection(1);
+        } else if (currentSection < totalSections - 1) {
+          scrollToSection(currentSection + 1);
+        }
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         e.preventDefault();
-        if (currentSection > 0) scrollToSection(currentSection - 1);
+        if (currentSection === 0 && hs > 0) {
+          setHeroStep(hs - 1);
+        } else if (currentSection === 1) {
+          scrollToSection(0);
+          setHeroStep(HERO_STEPS - 1);
+        } else if (currentSection > 0) {
+          scrollToSection(currentSection - 1);
+        }
       }
     };
 
@@ -173,7 +235,18 @@ export default function App() {
       if (e.target.closest('button, a, input, pre, code, [role="button"]')) return;
 
       const isRight = e.clientX >= window.innerWidth * 0.5;
-      if (isRight && currentSection < totalSections - 1) {
+      const hs = heroStepRef.current;
+
+      if (isRight && currentSection === 0 && hs < HERO_STEPS - 1) {
+        setHeroStep(hs + 1);
+      } else if (!isRight && currentSection === 0 && hs > 0) {
+        setHeroStep(hs - 1);
+      } else if (isRight && currentSection === 0 && hs >= HERO_STEPS - 1) {
+        scrollToSection(1);
+      } else if (!isRight && currentSection === 1) {
+        scrollToSection(0);
+        setHeroStep(HERO_STEPS - 1);
+      } else if (isRight && currentSection < totalSections - 1) {
         scrollToSection(currentSection + 1);
       } else if (!isRight && currentSection > 0) {
         scrollToSection(currentSection - 1);
@@ -189,8 +262,9 @@ export default function App() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('click', handleClick);
       cancelAnimationFrame(animationFrameId);
+      resizeObserver.disconnect();
     };
-  }, [currentSection]);
+  }, [currentSection, totalSections]);
 
   return (
     <div
@@ -210,14 +284,16 @@ export default function App() {
       <DeformableMeshBackground scrollProgress={scrollProgress} theme={theme} />
 
       {/* Floating Glass Pill Navbar Header */}
-      <Navbar
+        <Navbar
         currentSection={currentSection}
         scrollToSection={scrollToSection}
         currentLang={lang}
         setLang={setLang}
         theme={theme}
         setTheme={setTheme}
-        t={t}
+          t={t}
+          onProjectsOpen={() => setProjectsOpen((open) => !open)}
+          projectsOpen={projectsOpen}
       />
 
       {/* Main Horizontal Scroll Container */}
@@ -227,32 +303,46 @@ export default function App() {
         style={{ scrollSnapType: 'none' }}
       >
         {/* Section 01: Hero */}
-        <HeroSection onExploreClick={() => scrollToSection(2)} t={t} />
+        <HeroSection onExploreClick={() => scrollToSection(1)} t={t} heroStep={heroStep} />
 
         {/* Section 02: About / Stack */}
         <ServerConsole t={t} />
 
         {/* Section 03 - 06: Projects Rack Panels */}
+        {/* Section 03: Contact Gateway */}
+        <ContactSection t={t} />
+
+        {/* Sections 04–07: Projects */}
         {projects.map((proj) => (
           <ProjectPanel key={proj.id} project={proj} t={t} />
         ))}
-
-        {/* Section 07: Contact Gateway */}
-        <ContactSection t={t} />
       </main>
 
       {/* Horizontal Nav Arrows Overlay */}
       <div className="fixed bottom-6 right-8 z-50 flex items-center gap-2">
         <button
-          onClick={() => scrollToSection(Math.max(0, currentSection - 1))}
-          disabled={currentSection === 0}
+          onClick={() => {
+            if (currentSection === 0 && heroStep > 0) {
+              setHeroStep(heroStep - 1);
+            } else {
+              if (currentSection === 1) setHeroStep(HERO_STEPS - 1);
+              scrollToSection(Math.max(0, currentSection - 1));
+            }
+          }}
+          disabled={currentSection === 0 && heroStep === 0}
           className="w-10 h-10 rounded-full glass-capsule flex items-center justify-center text-current hover:border-[#6D58F0] hover:text-[#39FF88] disabled:opacity-30 disabled:hover:border-white/10 transition-all cursor-pointer"
           title="Previous section"
         >
           ←
         </button>
         <button
-          onClick={() => scrollToSection(Math.min(totalSections - 1, currentSection + 1))}
+          onClick={() => {
+            if (currentSection === 0 && heroStep < HERO_STEPS - 1) {
+              setHeroStep(heroStep + 1);
+            } else {
+              scrollToSection(Math.min(totalSections - 1, currentSection + 1));
+            }
+          }}
           disabled={currentSection === totalSections - 1}
           className="w-10 h-10 rounded-full glass-capsule flex items-center justify-center text-current hover:border-[#6D58F0] hover:text-[#39FF88] disabled:opacity-30 disabled:hover:border-white/10 transition-all cursor-pointer"
           title="Next section"
